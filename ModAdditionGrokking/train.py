@@ -3,7 +3,7 @@ import pathlib
 import torch
 
 from imports.model.ModAdditionModel import ModAdditionModel
-from imports.model.helper_functions import save_model
+from imports.misc.helper_functions import save_model
 from imports.plotting.plot_training import plot_final_histories
 from imports.training.ModAdditionBatcher import ModAdditionBatcher
 import imports.training.training as training
@@ -12,7 +12,8 @@ import imports.training.training as training
 def train(HP):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     parent_path = pathlib.Path(__file__).parent.resolve()
-    torch.manual_seed(123)
+    if HP["seed"] is not None:
+        torch.manual_seed(HP["seed"])
 
     model = ModAdditionModel(p=HP["p"], d=HP["d"], N_heads=HP["N_heads"], d_head=HP["d_head"], n=HP["n"]).to(device)
 
@@ -53,6 +54,7 @@ if __name__ == "__main__":
         "n": 512,
         "lambda": 5,
         "frac_train": 0.3,
-        "eval_step": 10
+        "eval_step": 10,
+        "seed": 123
     }
     train(HYPERPARAMETERS)
