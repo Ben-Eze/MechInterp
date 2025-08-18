@@ -11,7 +11,7 @@ class MultiHeadAttention(nn.Module):
 
     def __init__(self, l_context, d_token, N_heads, d_head):
         super().__init__()
-        self.sa_heads = [nn.Linear(d_token, d_head, bias=False) for _ in range(N_heads)]
+        self.sa_heads = nn.ModuleList([nn.Linear(d_token, d_head, bias=False) for _ in range(N_heads)])
 
         # projects from concatenated sa_head outputs to something to add to the residual stream
         self.proj = nn.Linear(N_heads*d_head, d_token) 
